@@ -12,8 +12,6 @@ def filter_LED_color(image):
     # filtered = np.where(np.logical_and(blue > 253, brightness > 250), 0, 255)
     filtered = cv2.threshold(image, 250, 255, cv2.THRESH_BINARY)[1]
     filtered = np.max(filtered, axis=2)
-    print(filtered.shape)
-    # print(np.argwhere(filtered))
     if not np.any(filtered):
         print("Nothing detected, returning...\n\n")
         return filtered
@@ -131,9 +129,13 @@ class Camera:
         :return: the estimated position of the LED ring
         """
         image = self.capture_image()
-        # image = cv2.imread('LED4.png', 0)
+        # while True:
+        #     cv2.imshow('image', image)
+        #     k = cv2.waitKey(1)
+        #     if k != -1:
+        #         break
         points = np.argwhere(filter_LED_color(image))
-        if points.size < 3:
+        if points.size < 5:
             return np.array([0.0, 0.0, 0.0])
         pt1, pt2 = get_maximum_pixel_separation(points)
         return self.get_absolute_coords(pt1, pt2, np.mean([pt1, pt2], axis=0))
