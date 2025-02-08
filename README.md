@@ -3,7 +3,8 @@
 12:00 Saturday: Minimum viable product
 
 ### Outline of the plan
-- Pen w/ cameras tracking 
+- Pen w/ cameras tracking
+    - Pen can write on paper and on computer at the same time
     - Pen stuff: attach LED ring to end?
     - Pi Camera -> preprocessing on Pi -> Processing on laptop
     - Cameras mounted via clips at right angles
