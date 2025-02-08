@@ -1,0 +1,14 @@
+# upgrade distros
+sudo apt-get update
+sudo apt-get upgrade -y 
+sudo apt-get dist-upgrade -y
+# install adafruit master library
+# pip should be installeda already, if not 'sudo apt install python3-pip'
+pip3 install adafruit-blinka
+# Configuring i2c via command line (tools)
+sudo apt-get install -y python3-smbus
+sudo apt-get install -y i2c-tools
+# Enable i2c in rpi kernel (done) 'sudo reboot' afterwards
+# Detect any connected devices
+sudo i2cdetect -y 1
+# Follow this tutorial afterwards https://www.waveshare.com/wiki/Raspberry_Pi_Tutorial_Series:_I2C
