@@ -7,11 +7,12 @@ import cv2
 def filter_LED_color(image):
     """
     :param image: numpy array containing the image
-    :return: the image with only the color of the LED, everything else filtered out
+    :return: the points with only the color of the LED, everything else filtered out
     """
-    raise NotImplementedError("TODO")
-    return np.zeros((image.shape[0], image.shape[1]), dtype=np.uint8)
-
+    brightness = np.mean(image, axis=2)
+    blue = image[:, :, 0]
+    return np.argwhere(np.logical_and(blue > 253, brightness > 250)).astype(np.uint8)
+    # return np.where(brightness > 250, 255, 0).astype(np.uint8)
 
 def get_maximum_pixel_separation(filtered_image):
     """
@@ -117,6 +118,15 @@ class AMXWebcam(Camera):
 
 
 if __name__ == '__main__':
-    cammod3 = CameraModule3(0)
-    print(cammod3.pos_estimate())
-
+    # cammod3 = CameraModule3(0)
+    # print(cammod3.pos_estimate())
+    import cv2
+    image = cv2.imread('LED2.jpg')
+    filtered = filter_LED_color(image)
+    print(filtered.shape)
+    print(image[filtered].shape)
+    while True:
+        cv2.imshow('filtered', image[filtered])
+        k = cv2.waitKey(1)
+        if k != -1:
+            break
