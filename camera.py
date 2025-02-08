@@ -1,4 +1,7 @@
+# Have ported everything from here to vision.py
+
 import cv2
+
 
 cam1 = cv2.VideoCapture(0)
 # cam2 = cv2.VideoCapture(1)

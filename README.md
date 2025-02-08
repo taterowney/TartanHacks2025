@@ -14,3 +14,8 @@
     - OpenCV image processing on Pi, send results via Serial
     - Real-time whiteboard showing pen strokes!!
     - TAKE PICTURES and stuff
+
+### Camera stuff
+- Facing Raspberry Pi's serial ports:
+   - Top right is index 0
+   - Bottom right is index 2

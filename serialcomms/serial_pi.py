@@ -15,6 +15,7 @@ def pi_mainloop(get_pen_location=lambda: (0, 0, 0), port='/dev/ttyACM0', loop_ti
                     print(f"Waiting for port {port} to connect. Retrying in 1s...")
                     time.sleep(1)
 
+            print(f"Connected to port {port}. Waiting for 'ready' signal...")
             # Wait for computer to provide 'ready' signal
             while True:
                 if ser.in_waiting:
@@ -22,6 +23,7 @@ def pi_mainloop(get_pen_location=lambda: (0, 0, 0), port='/dev/ttyACM0', loop_ti
                     if data == 'ready':
                         break
 
+            print("Received 'ready' signal. Starting main loop...")
             # Transmit location every loop_time until the host says "done"
             while True:
                 loop_start = time.time()

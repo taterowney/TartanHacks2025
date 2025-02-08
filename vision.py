@@ -1,5 +1,6 @@
 import numpy as np
 from convexhull import farthest_points_2d
+import cv2
 
 # WEBCAM DATASHEET: https://www.amx.com/en-US/product_documents/nmx-vcc-1000-datasheet-pdf
 
@@ -9,7 +10,7 @@ def filter_LED_color(image):
     :return: the image with only the color of the LED, everything else filtered out
     """
     raise NotImplementedError("TODO")
-    return np.zeros_like(image)
+    return np.zeros((image.shape[0], image.shape[1]), dtype=np.uint8)
 
 
 def get_maximum_pixel_separation(filtered_image):
@@ -37,13 +38,22 @@ class Camera:
     An abstract class for camera functions
     Should be subclassed for specific cameras, and have their attributes (sensor_width/height, image_width/height, focal_length) set
     """
-    def __init__(self, camera_location_vector=np.array([0.0, 100.0, 0.0]), camera_depth_vector=np.array([0.0, -1.0, 0.0]), camera_x_vector=np.array([-1.0, 0.0, 0.0]), camera_y_vector=np.array([0.0, 0.0, 1.0])):
+    def __init__(self, camera_index, camera_location_vector=np.array([0.0, 100.0, 0.0]), camera_depth_vector=np.array([0.0, -1.0, 0.0]), camera_x_vector=np.array([-1.0, 0.0, 0.0]), camera_y_vector=np.array([0.0, 0.0, 1.0])):
+        self.camera = cv2.VideoCapture(camera_index)
+
         # DEFAULT: at the top of the drawing surface 10cm away from the center, facing downwards towards the center of the paper
         self.camera_location_vector = camera_location_vector
         self.camera_coords_transform = np.linalg.inv(np.array([camera_x_vector / np.linalg.norm(camera_x_vector), camera_y_vector / np.linalg.norm(camera_y_vector), camera_depth_vector / np.linalg.norm(camera_depth_vector)]))
 
         self.pitch_x = self.sensor_width / self.image_width
         self.pitch_y = self.sensor_height / self.image_height
+
+    def capture_image(self):
+        ret, image = self.camera.read()
+        if ret:
+            return image
+        else:
+            return np.zeros((self.image_height, self.image_width, 3))
 
     def get_depth_mm(self, pt1, pt2, actual_separation=10):
         """
@@ -83,14 +93,13 @@ class Camera:
         camera_coords = self.get_camera_coords(pt1, pt2, centroid)
         return np.dot(self.camera_coords_transform, camera_coords) + self.camera_location_vector
 
-    def pos_estimate(self, image):
+    def pos_estimate(self):
         """
-        :param image: numpy array containing the image
         :return: the estimated position of the LED ring
         """
-        filtered_image = filter_LED_color(image)
-        # centroid = get_centroid(filtered_image)
-        pt1, pt2 = get_maximum_pixel_separation(filtered_image)
+        image = self.capture_image()
+        # image = filter_LED_color(image)
+        pt1, pt2 = get_maximum_pixel_separation(np.argwhere(image))
         return self.get_absolute_coords(pt1, pt2, np.mean([pt1, pt2], axis=0))
 
 
@@ -108,10 +117,6 @@ class AMXWebcam(Camera):
 
 
 if __name__ == '__main__':
-    cammod3 = CameraModule3()
-    # Test get_absolute_coords
-    pt1 = np.array([2592//2, 1])
-    pt2 = np.array([2592 // 2, 4607])
-    centroid = np.array([2592 // 2, 4608 // 2])
-    print(cammod3.get_absolute_coords(pt1, pt2, centroid))
+    cammod3 = CameraModule3(0)
+    print(cammod3.pos_estimate())
 
