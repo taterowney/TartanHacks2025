@@ -67,6 +67,7 @@ class Camera:
         # DEFAULT: at the top of the drawing surface 10cm away from the center, facing downwards towards the center of the paper
         self.camera_location_vector = camera_location_vector
         self.camera_coords_transform = np.linalg.inv(np.array([camera_x_vector / np.linalg.norm(camera_x_vector), camera_y_vector / np.linalg.norm(camera_y_vector), camera_depth_vector / np.linalg.norm(camera_depth_vector)]))
+        # self.camera_coords_transform = np.array([camera_x_vector / np.linalg.norm(camera_x_vector), camera_y_vector / np.linalg.norm(camera_y_vector), camera_depth_vector / np.linalg.norm(camera_depth_vector)])
 
         self.pitch_x = self.sensor_width / self.image_width
         self.pitch_y = self.sensor_height / self.image_height
@@ -125,7 +126,8 @@ class Camera:
         :return: numpy array of [lateral distance from center of page, vertical distance from center of page, height above page]
         """
         camera_coords = self.get_camera_coords(pt1, pt2, centroid)
-        return np.dot(self.camera_coords_transform, camera_coords) + self.camera_location_vector
+        # return np.dot(self.camera_coords_transform, camera_coords) + self.camera_location_vector
+        return np.dot(self.camera_coords_transform, camera_coords)
 
     def pos_estimate(self):
         """
@@ -156,9 +158,9 @@ class AMXWebcam(Camera):
     image_height = 1080 # pixels
 
     # Assuming these values are the same for now, will have to manually debug
-    sensor_width = 3.68 # mm
-    sensor_height = 6.45 # mm
-    focal_length = 4.74 # mm
+    sensor_width = 6.0 # mm
+    sensor_height = 12.0 # mm
+    focal_length = 1.0 # mm
 
 
 class Aggregator:
