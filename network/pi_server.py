@@ -30,7 +30,7 @@ def run_server_threaded(host="localhost", port=4242):
 
 
 if __name__ == '__main__':
-    run_server_threaded()
+    run_server_threaded(host="0.0.0.0")
     while True:
         COORDINATES_BUFFER.append((time.time(), time.time(), time.time()))
         time.sleep(1)
