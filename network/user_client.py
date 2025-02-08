@@ -1,5 +1,5 @@
 import urllib.request, urllib.error
-import json
+import json, time
 
 def get_coordinates(port=4242):
     url = f"http://localhost:{port}/coordinates"
@@ -19,3 +19,8 @@ def get_coordinates(port=4242):
             return data
     except urllib.error.URLError as e:
         return []
+
+if __name__ == '__main__':
+    while 1:
+        print(get_coordinates())
+        time.sleep(0.25)
