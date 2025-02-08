@@ -82,7 +82,10 @@ class Camera:
         #         break
 
         if ret:
+            height, width, channels = image.shape
+            image[:height//3, :, :] = 0
             return image
+            # return image
         else:
             return np.zeros((self.image_height, self.image_width, 3))
 
@@ -156,6 +159,22 @@ class AMXWebcam(Camera):
     sensor_width = 3.68 # mm
     sensor_height = 6.45 # mm
     focal_length = 4.74 # mm
+
+
+class Aggregator:
+    def __init__(self, *cameras):
+        self.cameras = cameras
+        self.past_positions = [[np.array([0.0, 0.0, 0.0]) for _ in cameras]]*10
+
+    def add_data(self, *estimates):
+        self.past_positions.append(list(estimates))
+        if len(self.past_positions) > 10:
+            self.past_positions.pop(0)
+
+    def get_estimate(self):
+        return np.mean(self.past_positions[-1], axis=0)
+
+
 
 
 if __name__ == '__main__':

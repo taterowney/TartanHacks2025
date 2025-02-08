@@ -28,10 +28,12 @@ def list_ports():
 
 # list_ports()
 
-cam1 = cv2.VideoCapture(2)
+cam1 = cv2.VideoCapture(0)
 for i in range(10):
     while True:
         ret, image1 = cam1.read()
+        height, width, channels = image1.shape
+        image1[:height // 3, :, :] = 0
         cv2.imshow('Imagetest', image1)
         k = cv2.waitKey(1)
         if k != -1:
