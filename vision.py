@@ -1,13 +1,14 @@
 import numpy as np
 from convexhull import farthest_points_2d
-import random
 
+# WEBCAM DATASHEET: https://www.amx.com/en-US/product_documents/nmx-vcc-1000-datasheet-pdf
 
 def filter_LED_color(image):
     """
     :param image: numpy array containing the image
     :return: the image with only the color of the LED, everything else filtered out
     """
+    raise NotImplementedError("TODO")
     return np.zeros_like(image)
 
 
@@ -100,6 +101,10 @@ class CameraModule3(Camera):
     image_height = 4608 # pixels
     focal_length = 4.74 # mm
 
+class AMXWebcam(Camera):
+
+    image_width = 1920 # pixels
+    image_height = 1080 # pixels
 
 
 if __name__ == '__main__':
