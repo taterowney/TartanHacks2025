@@ -11,4 +11,4 @@
     - Transmit via USBC to host computer
     - OpenCV image processing on Pi, send results via Serial
     - Real-time whiteboard showing pen strokes!!
- 
+    - TAKE PICTURES and stuff
