@@ -142,7 +142,10 @@ class Camera:
         points = np.argwhere(filter_LED_color(image))
         if points.size < 5:
             return np.array([0.0, 0.0, 0.0])
-        pt1, pt2 = get_maximum_pixel_separation(points)
+        try:
+            pt1, pt2 = get_maximum_pixel_separation(points)
+        except Exception as e:
+            pt1, pt2 = points[0], points[1]
         return self.get_absolute_coords(pt1, pt2, np.mean([pt1, pt2], axis=0))
 
 

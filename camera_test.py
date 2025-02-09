@@ -28,7 +28,7 @@ def list_ports():
 
 # list_ports()
 
-cam1 = cv2.VideoCapture(0)
+cam1 = cv2.VideoCapture(1)
 for i in range(10):
     while True:
         ret, image1 = cam1.read()
